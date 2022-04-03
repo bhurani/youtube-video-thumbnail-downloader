@@ -1,3 +1,21 @@
+<?php
+  if($_SERVER['REQUEST_METHOD'] == 'POST'){
+    if(!empty($_POST['imgurl'])){
+      $img_url = $_POST['imgurl'];
+
+      $curl_handle = curl_init($img_url);
+      curl_setopt($curl_handle, CURLOPT_SSL_VERIFYPEER, false);
+      curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, true);
+      $download_img = curl_exec($curl_handle);
+      curl_close($curl_handle);
+
+      header('Content-Type: image/jpg; charset=UTF-8');
+      header('Content-Disposition: attachment; filename="thumbnail.jpg"');
+      echo $download_img;
+    }
+  }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,7 +32,7 @@
 <body>
 
   <main>
-    <form action="#">
+    <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
       <header>
         <h2>Download Thumbnail</h2>
       </header>
